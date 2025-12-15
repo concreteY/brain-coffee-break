@@ -3,15 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>브레인 커피브레이크</title>
+    <title>브레인 커피브레이크 - 서류 정리</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <h1>김부장의 뒤죽박죽 서류 정리</h1>
-        <p>서류가 엉망입니다! 단어를 완성해주세요.</p>
-        <div id="word-area"></div>
-        <script src="script.js"></script>
+    <div class="game-container">
+        <header class="game-header">
+            <div class="status-box">
+                <span>남은 서류: <b id="files-left">0</b></span>
+                <span>점수: <b id="score">0</b>점</span>
+            </div>
+            <div id="hint-box" class="hint-text">힌트가 여기에 나옵니다</div>
+        </header>
+
+        <main>
+            <div id="answer-zone" class="zone">
+                </div>
+
+            <div id="scramble-zone" class="zone">
+                </div>
+        </main>
+
+        <div id="message-area" class="hidden">결재 완료!</div>
+
+        <div id="result-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>오늘의 업무 종료!</h2>
+                <p>최종 점수: <span id="final-score">0</span>점</p>
+                <button onclick="location.reload()">다시 출근하기</button>
+            </div>
+        </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
