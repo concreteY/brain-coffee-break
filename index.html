@@ -3,34 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>브레인 커피브레이크 - 서류 정리</title>
+    <title>브레인 커피브레이크 - 심화편</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <header class="game-header">
             <div class="status-box">
-                <span>남은 서류: <b id="files-left">0</b></span>
+                <span class="timer-box">⏰ 남은 시간: <b id="timer">60</b>초</span>
                 <span>점수: <b id="score">0</b>점</span>
             </div>
-            <div id="hint-box" class="hint-text">힌트가 여기에 나옵니다</div>
+            <div id="hint-area" class="hint-container">
+                <button id="hint-btn" onclick="showHint()">💡 힌트 보기</button>
+                <span id="hint-text" class="hidden"></span>
+            </div>
         </header>
 
         <main>
-            <div id="answer-zone" class="zone">
+            <div id="answer-zone" class="zone answer-zone">
                 </div>
 
             <div id="scramble-zone" class="zone">
                 </div>
         </main>
 
-        <div id="message-area" class="hidden">결재 완료!</div>
+        <div id="message-area" class="hidden"></div>
 
         <div id="result-modal" class="modal hidden">
             <div class="modal-content">
-                <h2>오늘의 업무 종료!</h2>
+                <h2>⏰ 퇴근 시간입니다!</h2>
                 <p>최종 점수: <span id="final-score">0</span>점</p>
-                <button onclick="location.reload()">다시 출근하기</button>
+                <p id="rank-comment" class="comment"></p>
+                <button onclick="location.reload()">다시 도전하기</button>
             </div>
         </div>
     </div>

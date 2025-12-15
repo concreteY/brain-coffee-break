@@ -1,4 +1,4 @@
-// 1. 게임 데이터 (앞서 만든 30개 데이터)
+// 1. 데이터 (기존과 동일)
 const wordData = [
     { word: "결재", hint: "부장님의 도장이 필요해요" },
     { word: "회의", hint: "다 같이 모여서 의논해요" },
@@ -32,57 +32,89 @@ const wordData = [
     { word: "토사구팽", hint: "필요할 때 쓰고 버려요" }
 ];
 
-// 2. 게임 상태 변수
+// 훼방꾼 글자 모음 (오답 유도용)
+const dummyChars = "가나다라마바사아자차카타파하거너더러머버서어저처커터퍼허구누두루무부수우주추쿠투푸후기니디리미비시이지치키티피히";
+
+// 2. 상태 변수
 let currentScore = 0;
 let currentQuestionIndex = 0;
 let currentQuestion = null;
-let userInputs = []; // 사용자가 입력한 글자들
+let userInputs = [];
+let timeLeft = 60; // 60초 타임어택
+let timerInterval = null;
 
-// 3. DOM 요소 가져오기
+// 3. DOM 요소
 const scoreEl = document.getElementById("score");
-const filesLeftEl = document.getElementById("files-left");
-const hintEl = document.getElementById("hint-box");
+const timerEl = document.getElementById("timer");
+const hintBtn = document.getElementById("hint-btn");
+const hintText = document.getElementById("hint-text");
 const answerZone = document.getElementById("answer-zone");
 const scrambleZone = document.getElementById("scramble-zone");
 const messageArea = document.getElementById("message-area");
 const resultModal = document.getElementById("result-modal");
 const finalScoreEl = document.getElementById("final-score");
+const rankCommentEl = document.getElementById("rank-comment");
 
-// 4. 게임 초기화 및 시작
+// 4. 게임 초기화
 function initGame() {
-    // 문제를 무작위로 섞음 (매번 다른 순서)
-    wordData.sort(() => Math.random() - 0.5);
+    wordData.sort(() => Math.random() - 0.5); // 문제 섞기
     currentQuestionIndex = 0;
     currentScore = 0;
+    timeLeft = 60;
+    
     updateStatus();
+    startTimer();
     loadQuestion();
 }
 
-// 5. 문제 로드 함수
+// 5. 타이머 로직
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft <= 10) timerEl.style.color = "red"; // 임박 시 빨간색
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            endGame();
+        }
+    }, 1000);
+}
+
+// 6. 문제 로드
 function loadQuestion() {
-    // 모든 문제를 다 풀었으면 종료
     if (currentQuestionIndex >= wordData.length) {
-        endGame();
+        // 모든 문제 소진 시 (시간 남았어도 종료)
+        endGame(); 
         return;
     }
 
     currentQuestion = wordData[currentQuestionIndex];
-    userInputs = []; // 입력 초기화
+    userInputs = [];
     
-    // 화면 업데이트
-    hintEl.textContent = `💡 힌트: ${currentQuestion.hint}`;
+    // 힌트 초기화
+    hintText.classList.add("hidden");
+    hintBtn.style.display = "inline-block";
+    
     messageArea.className = "hidden";
-    updateStatus();
-    
     renderBoard();
 }
 
-// 6. 화면 그리기 (핵심 로직)
+// 힌트 보기 기능
+window.showHint = function() {
+    hintText.textContent = currentQuestion.hint;
+    hintText.classList.remove("hidden");
+    hintBtn.style.display = "none";
+    // 힌트 보면 5점 감점? (선택사항 - 지금은 감점 없음)
+};
+
+// 7. 화면 그리기 (가짜 글자 섞기 로직 포함)
 function renderBoard() {
     answerZone.innerHTML = "";
     scrambleZone.innerHTML = "";
 
-    // A. 정답 칸 만들기 (빈 칸 or 사용자가 채운 칸)
+    // A. 정답 칸 생성
     const totalLength = currentQuestion.word.length;
     for (let i = 0; i < totalLength; i++) {
         const tile = document.createElement("div");
@@ -90,31 +122,37 @@ function renderBoard() {
         if (userInputs[i]) {
             tile.textContent = userInputs[i];
             tile.classList.add("placed");
-            // 클릭하면 다시 내려가도록 (수정 기능)
             tile.onclick = () => removeInput(i);
         } else {
-            tile.style.backgroundColor = "#e0e0e0"; // 빈칸 표시
+            tile.style.backgroundColor = "#e9ecef"; // 빈칸
         }
         answerZone.appendChild(tile);
     }
 
-    // B. 섞인 글자들 만들기
-    // 사용자가 아직 입력하지 않은 글자들만 아래에 표시
-    const currentWordArr = currentQuestion.word.split("");
-    // 이미 입력된 글자는 제거하는 로직 (간단히 구현하기 위해 매번 다시 그림)
-    // 원본 글자 리스트에서 userInputs에 있는 글자들을 하나씩 뺌
-    let remainingChars = [...currentWordArr];
+    // B. 오답(훼방꾼) 타일 섞기
+    // 정답 글자들
+    let mixChars = currentQuestion.word.split("");
+    
+    // 이미 입력된 글자는 목록에서 뺌 (화면 하단에서 사라짐)
     userInputs.forEach(char => {
-        const idx = remainingChars.indexOf(char);
-        if (idx > -1) remainingChars.splice(idx, 1);
+        const idx = mixChars.indexOf(char);
+        if (idx > -1) mixChars.splice(idx, 1);
     });
 
-    // 남은 글자들을 섞어서 보여줌 (단, 시각적 혼란을 줄이기 위해 단순 나열)
-    // 실제 게임성을 위해 여기서 remainingChars를 shuffle 해도 됨.
-    // 여기서는 사용자가 쉽게 찾도록 그냥 둠 (또는 sort로 무작위)
-    remainingChars.sort(() => Math.random() - 0.5);
+    // 훼방꾼 글자 추가 (정답 길이만큼 추가하되, 이미 입력된 상태면 줄어듦)
+    // 난이도 조절: 항상 3개의 가짜 글자를 섞음
+    if (userInputs.length < totalLength) {
+        for(let k=0; k<3; k++) {
+            const randomChar = dummyChars.charAt(Math.floor(Math.random() * dummyChars.length));
+            mixChars.push(randomChar);
+        }
+    }
 
-    remainingChars.forEach(char => {
+    // 섞기
+    mixChars.sort(() => Math.random() - 0.5);
+
+    // 하단에 뿌리기
+    mixChars.forEach(char => {
         const tile = document.createElement("div");
         tile.className = "tile";
         tile.textContent = char;
@@ -123,7 +161,6 @@ function renderBoard() {
     });
 }
 
-// 7. 사용자 인터랙션 처리
 function addInput(char) {
     if (userInputs.length < currentQuestion.word.length) {
         userInputs.push(char);
@@ -137,36 +174,49 @@ function removeInput(index) {
     renderBoard();
 }
 
-// 8. 정답 확인
 function checkAnswer() {
     const currentWord = userInputs.join("");
+    // 정답 체크
     if (currentWord === currentQuestion.word) {
-        // 정답!
         currentScore += 10;
-        messageArea.textContent = "⭕ 결재 완료!";
+        // 추가 시간 보너스 (정답 맞추면 3초 추가)
+        timeLeft += 3; 
+        
+        messageArea.textContent = "⭕ 결재 완료! (+3초)";
         messageArea.classList.remove("hidden");
         messageArea.style.color = "#28a745";
-        
-        // 1초 뒤 다음 문제
+        updateStatus();
+
         setTimeout(() => {
             currentQuestionIndex++;
             loadQuestion();
-        }, 1000);
+        }, 800);
     } else if (userInputs.length === currentQuestion.word.length) {
-        // 글자 수는 맞는데 틀림
-        messageArea.textContent = "❌ 반려! 다시 확인하세요.";
+        // 길이는 맞는데 틀림
+        messageArea.textContent = "❌ 다시 확인하세요!";
         messageArea.classList.remove("hidden");
         messageArea.style.color = "#dc3545";
+        
+        // 틀렸을 때 약간의 페널티 (타일 초기화는 너무 가혹하니 그냥 둠)
     }
 }
 
 function updateStatus() {
     scoreEl.textContent = currentScore;
-    filesLeftEl.textContent = wordData.length - currentQuestionIndex;
+    timerEl.textContent = timeLeft;
 }
 
 function endGame() {
+    clearInterval(timerInterval);
     finalScoreEl.textContent = currentScore;
+    
+    // 점수별 멘트
+    let comment = "";
+    if (currentScore >= 150) comment = "매니저님, 역시 최고이십니다! (신 등급)";
+    else if (currentScore >= 100) comment = "아직 감이 살아있으시네요! (금손 등급)";
+    else comment = "조금 더 분발하셔야겠어요! (노력 요망)";
+    
+    rankCommentEl.textContent = comment;
     resultModal.classList.remove("hidden");
 }
 
