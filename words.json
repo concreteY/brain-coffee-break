@@ -1,0 +1,37 @@
+const wordData = [
+  // 초급
+  { id: 1, word: "결재", hint: "부장님의 도장이 필요해요", level: 1 },
+  { id: 2, word: "회의", hint: "다 같이 모여서 의논해요", level: 1 },
+  { id: 3, word: "출장", hint: "외부로 업무 보러 가요", level: 1 },
+  { id: 4, word: "기획", hint: "새로운 일을 구상해요", level: 1 },
+  { id: 5, word: "승진", hint: "직급이 올라갔어요!", level: 1 },
+  { id: 6, word: "성과", hint: "일한 결과물이에요", level: 1 },
+  { id: 7, word: "월급", hint: "통장이 잠시 스쳐가요", level: 1 },
+  { id: 8, word: "회식", hint: "오늘 저녁에 삼겹살?", level: 1 },
+  { id: 9, word: "휴가", hint: "며칠 쉬다 올게요", level: 1 },
+  { id: 10, word: "정년", hint: "직장 생활의 명예로운 끝", level: 1 },
+
+  // 중급
+  { id: 11, word: "보고서", hint: "상사에게 제출하는 문서", level: 2 },
+  { id: 12, word: "워크숍", hint: "1박 2일로 떠나는 연수", level: 2 },
+  { id: 13, word: "탕비실", hint: "커피 믹스 타 먹는 곳", level: 2 },
+  { id: 14, word: "야유회", hint: "봄가을에 떠나는 소풍", level: 2 },
+  { id: 15, word: "경위서", hint: "잘못된 일을 설명해요", level: 2 },
+  { id: 16, word: "송년회", hint: "연말 모임", level: 2 },
+  { id: 17, word: "시무식", hint: "새해 첫 출근 행사", level: 2 },
+  { id: 18, word: "인건비", hint: "사람에게 들어가는 비용", level: 2 },
+
+  // 고급
+  { id: 19, word: "업무일지", hint: "매일매일 쓰는 기록", level: 3 },
+  { id: 20, word: "벤치마킹", hint: "잘하는 곳을 따라 배워요", level: 3 },
+  { id: 21, word: "인센티브", hint: "성과급 보너스", level: 3 },
+  { id: 22, word: "고진감래", hint: "쓴 것이 다하면 단 것이 와요", level: 3 },
+  { id: 23, word: "유비무환", hint: "미리 준비하면 걱정이 없죠", level: 3 },
+  { id: 24, word: "대기만성", hint: "큰 사람은 늦게 성공해요", level: 3 },
+  { id: 25, word: "솔선수범", hint: "남보다 앞장서서 모범을 보여요", level: 3 },
+  { id: 26, word: "일취월장", hint: "실력이 날마다 늘어요", level: 3 },
+  { id: 27, word: "역지사지", hint: "입장을 바꿔서 생각해보세요", level: 3 },
+  { id: 28, word: "다다익선", hint: "많으면 많을수록 좋아요", level: 3 },
+  { id: 29, word: "전화위복", hint: "화가 바뀌어 오히려 복이 돼요", level: 3 },
+  { id: 30, word: "토사구팽", hint: "필요할 때 쓰고 버려요", level: 3 }
+];
