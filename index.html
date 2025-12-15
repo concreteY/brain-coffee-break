@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>브레인 커피브레이크 - 심화편</title>
+    <title>브레인 커피브레이크 - 고난이도</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,8 +14,7 @@
                 <span>점수: <b id="score">0</b>점</span>
             </div>
             <div id="hint-area" class="hint-container">
-                <button id="hint-btn" onclick="showHint()">💡 힌트 보기</button>
-                <span id="hint-text" class="hidden"></span>
+                <span id="hint-text">💡 힌트가 여기에 표시됩니다</span>
             </div>
         </header>
 
@@ -31,7 +30,7 @@
 
         <div id="result-modal" class="modal hidden">
             <div class="modal-content">
-                <h2>⏰ 퇴근 시간입니다!</h2>
+                <h2>⏳ 업무 시간 종료!</h2>
                 <p>최종 점수: <span id="final-score">0</span>점</p>
                 <p id="rank-comment" class="comment"></p>
                 <button onclick="location.reload()">다시 도전하기</button>
