@@ -208,9 +208,9 @@ function endGame() {
     
     // 점수별 멘트 (상향 조정)
     let comment = "";
-    if (currentScore >= 200) comment = "당신은 사자성어의 달인! (신 등급)";
-    else if (currentScore >= 100) comment = "뇌가 아주 건강합니다! (우수 등급)";
-    else comment = "조금 더 연습이 필요해요! (분발 요망)";
+    if (currentScore >= 200) comment = "매니저니이임~~~ 나이스! 퇴근하십시오! (신 등급)";
+    else if (currentScore >= 100) comment = "매니저님 뇌가 아주 건강합니다! 정시퇴근~ (우수 등급)";
+    else comment = "조금 더 연습이 필요해요! 야근야근열매 드세요~ (분발 요망)";
     
     rankCommentEl.textContent = comment;
     resultModal.classList.remove("hidden");
